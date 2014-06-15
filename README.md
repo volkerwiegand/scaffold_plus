@@ -25,6 +25,12 @@ This helper adds parent#has_many and child#belongs_to to the models
 and updates the mass assignment whitelist in the controller.
 It can also add a migration for the parent_id and a counter.
 
+### Add a collection to a resource route
+    rails generate scaffold_plus:collection
+
+This helper works on config/routes.rb and adds code for a collection
+to a newly created resource route.
+
 ## Testing
 
 Since I have no experience with test driven development (yet), this is

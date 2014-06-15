@@ -3,7 +3,7 @@ require 'rails/generators/active_record'
 module ScaffoldPlus
   module Generators
     class CollectionGenerator < ActiveRecord::Generators::Base
-      desc "Add collection(s) to resource route"
+      desc "Add a collection to a resource route"
       argument :name, type: :string,
                desc: "The object for the collection routes and views"
       argument :routes, type: :array, banner: "route[:verb=get] ...",
