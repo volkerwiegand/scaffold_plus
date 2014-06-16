@@ -34,6 +34,16 @@ to a newly created resource route.
 ### Add ancestry to create a tree structure (or hierarchy)
     rails generate scaffold_plus:ancestry
 
+This helper adds has_ancestry to the model and updates the mass assignment
+whitelist in the controller. It can also add a migration.
+
+### Add many-to-many association with intermediate join table
+    rails generate scaffold_plus:many_to_many
+
+This helper creates a join table and updates the two parent resources.
+It can handle additional attributes in the join table incl. whitelisting
+and accepts_nested_attributes_for in one of the parents.
+
 ## Testing
 
 Since I have no experience with test driven development (yet), this is

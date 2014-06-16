@@ -41,9 +41,9 @@ module ScaffoldPlus
           text = before_array.include?(name) ? "\n" : ""
           text << "  has_many :#{children}"
           text << ", inverse_of: :#{name}" if options.inverse?
-          text << ", dependent: :#{dependent}" if options[:dependent]
+          text << ", dependent: :#{dependent}" if options[:dependent].present?
           text << "\n"
-          text << "  accepts_nested_attributes_for :#{children}\n" if options[:nested]
+          text << "  accepts_nested_attributes_for :#{children}\n" if options[:nested].present?
           text << "\n" if after_array.include?(name)
           text
         end
@@ -61,7 +61,7 @@ module ScaffoldPlus
       end
       
       def add_to_permit
-        return unless options[:nested]
+        return unless options[:nested].present?
         list = options[:nested].map{|n| ":#{n}"}.join(', ')
         text = "#{children}_attributes: [ #{list} ]"
         file = "app/controllers/#{table_name}_controller.rb"
@@ -81,7 +81,7 @@ module ScaffoldPlus
       end
       
       def dependent
-        if options[:dependent] && options[:dependent] == "restrict"
+        if options[:dependent].present? && options[:dependent] == "restrict"
           "restrict_with_exception"
         else
           options[:dependent]
