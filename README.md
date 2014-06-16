@@ -44,6 +44,12 @@ This helper creates a join table and updates the two parent resources.
 It can handle additional attributes in the join table incl. whitelisting
 and accepts_nested_attributes_for in one of the parents.
 
+### Add many-to-many association with has_and_belongs_to_many
+    rails generate scaffold_plus:habtm
+
+This helper scaffolds a has_and_belongs_to_many relationship with migration
+and updates to the models.
+
 ## Testing
 
 Since I have no experience with test driven development (yet), this is
