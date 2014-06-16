@@ -31,6 +31,9 @@ It can also add a migration for the parent_id and a counter.
 This helper works on config/routes.rb and adds code for a collection
 to a newly created resource route.
 
+### Add ancestry to create a tree structure (or hierarchy)
+    rails generate scaffold_plus:ancestry
+
 ## Testing
 
 Since I have no experience with test driven development (yet), this is
