@@ -25,7 +25,11 @@ module ScaffoldPlus
         lines = options.before? ? [ "" ] : []
         lines << [
           "  def #{user}_data(action, attrib)",
-          "    #{user.camelize}.find(action).try(attrib)",
+          "    if action.include?('update')",
+          "      #{user.camelize}.find(updated_by).try(attrib)",
+          "    else".
+          "      #{user.camelize}.find(created_by).try(attrib)",
+          "    end",
           "  end",
           ""
         ]
