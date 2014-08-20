@@ -21,11 +21,11 @@ module ScaffoldPlus
         migration_template 'created_by_migration.rb', "db/migrate/#{migration_name}.rb"
       end
       
-      def add_to_model
+      def update_model
         lines = options.before? ? [ "" ] : []
         lines << [
           "  def #{user}_data(action, attrib)",
-          "    #{user.camelize}.find(#{action}d_by).try('#{attrib}')",
+          "    #{user.camelize}.find(action).try(attrib)",
           "  end",
           ""
         ]
@@ -33,7 +33,7 @@ module ScaffoldPlus
         inject_into_class "app/models/#{name}.rb", class_name, lines.join("\n")
       end
       
-      def add_to_controller
+      def update_controller
         file = "app/controllers/#{table_name}_controller.rb"
         inject_into_file file, after: /def update$/ do
           "\n    @#{name}.updated_by = current_#{user}.id if current_#{user}"
