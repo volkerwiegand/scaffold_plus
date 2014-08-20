@@ -27,7 +27,7 @@ module ScaffoldPlus
           "  def #{user}_data(action, attrib)",
           "    if action.include?('update')",
           "      #{user.camelize}.find(updated_by).try(attrib)",
-          "    else".
+          "    else",
           "      #{user.camelize}.find(created_by).try(attrib)",
           "    end",
           "  end",
