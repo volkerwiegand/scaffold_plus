@@ -27,7 +27,7 @@ module ScaffoldPlus
           lines << [
             "  def #{action}_by_name",
             "    #{user.camelize}.find(#{action}_by).try('name')",
-            "  end"
+            "  end",
             ""
           ]
           lines << [ "" ] if options.after?
