@@ -12,6 +12,8 @@ module ScaffoldPlus
                desc: 'Can be destroy, delete, or restrict'
       class_option :nested, type: :array, banner: 'attribute [...]',
                desc: 'Add accepts_nested_attributes_for (incl. whitelisting)'
+      class_option :foreign_key, type: :string,
+               desc: 'Set the name of the foreign key directly'
       class_option :inverse, type: :boolean, default: false,
                desc: 'Add inverse_of to both models'
       class_option :counter, type: :boolean, default: false,
@@ -43,7 +45,9 @@ module ScaffoldPlus
           text << ", inverse_of: :#{name}" if options.inverse?
           text << ", dependent: :#{dependent}" if options[:dependent].present?
           text << "\n"
-          text << "  accepts_nested_attributes_for :#{children}\n" if options[:nested].present?
+          if options[:nested].present?
+            text << "  accepts_nested_attributes_for :#{children}\n"
+          end
           text << "\n" if after_array.include?(name)
           text
         end
@@ -52,6 +56,9 @@ module ScaffoldPlus
         inject_into_class "app/models/#{child}.rb", child.camelize do
           text = before_array.include?(child) ? "\n" : ""
           text << "  belongs_to :#{name}"
+          if options[:foreign_key].present?
+            text << ", foreign_key: \"#{options[:foreign_key]}\""
+          end
           text << ", inverse_of: :#{children}" if options.inverse?
           text << ", counter_cache: true" if options.counter?
           text << "\n"
