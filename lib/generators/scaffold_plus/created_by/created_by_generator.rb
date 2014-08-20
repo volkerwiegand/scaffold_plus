@@ -37,12 +37,12 @@ module ScaffoldPlus
       
       def add_to_controller
         file = "app/controllers/#{table_name}_controller.rb"
-        inject_into_file file, after: /@#{name} = #{class_name}\.new\(#{name}_params\)$/ do
-          "    @#{name}.created_by = current_#{user}.id if current_#{user}\n" +
-          "    @#{name}.updated_by = current_#{user}.id if current_#{user}\n"
-        end
         inject_into_file file, after: /def update$/ do
-          "    @#{name}.updated_by = current_#{user}.id if current_#{user}\n"
+          "\n    @#{name}.updated_by = current_#{user}.id if current_#{user}"
+        end
+        inject_into_file file, after: /@#{name} = #{class_name}\.new\(#{name}_params\)$/ do
+          "\n    @#{name}.created_by = current_#{user}.id if current_#{user}" +
+          "\n    @#{name}.updated_by = current_#{user}.id if current_#{user}"
         end
       end
       
