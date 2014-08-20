@@ -23,10 +23,22 @@ module ScaffoldPlus
       
       def add_to_model
         [ "created", "updated" ].each do |action|
+          user_name = "#{user.camelize}.find(#{action}_by).try('name')"
+          user_mail = "#{user.camelize}.find(#{action}_by).try('email')"
           lines = options.before? ? [ "" ] : []
           lines << [
             "  def #{action}_by_name",
-            "    #{user.camelize}.find(#{action}_by).try('name')",
+            "    #{user_name}",
+            "  end",
+            ""
+          ]
+          lines << [ "" ] if options.after?
+          inject_into_class "app/models/#{name}.rb", class_name, lines.join("\n")
+          
+          lines = options.before? ? [ "" ] : []
+          lines << [
+            "  def #{action}_by_email",
+            "    #{user_name} <#{user_email}>",
             "  end",
             ""
           ]
