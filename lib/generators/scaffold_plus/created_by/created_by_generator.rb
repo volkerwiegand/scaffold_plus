@@ -24,7 +24,7 @@ module ScaffoldPlus
       def add_to_model
         [ "created", "updated" ].each do |action|
           user_name = "#{user.camelize}.find(#{action}_by).try('name')"
-          user_mail = "#{user.camelize}.find(#{action}_by).try('email')"
+          user_email = "#{user.camelize}.find(#{action}_by).try('email')"
           lines = options.before? ? [ "" ] : []
           lines << [
             "  def #{action}_by_name",
