@@ -25,7 +25,7 @@ module ScaffoldPlus
         migration_template "ancestry_migration.rb", "db/migrate/#{migration_name}.rb"
       end
       
-      def add_to_model
+      def update_model
         inject_into_class "app/models/#{name}.rb", class_name do
           text = options.before? ? "\n" : ""
           text << "  has_ancestry"
@@ -36,7 +36,7 @@ module ScaffoldPlus
         end
       end
       
-      def add_to_permit
+      def update_controller
         return unless options.permit?
         text = ":ancestry"
         file = "app/controllers/#{table_name}_controller.rb"
