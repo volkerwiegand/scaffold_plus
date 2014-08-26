@@ -7,9 +7,9 @@ module ScaffoldPlus
       argument :name, type: :string,
                desc: "The resource that is SSL protected"
       class_option :only, type: :array,
-               desc: 'Enforce for these actions'
+               desc: 'Enforce SSL for these actions'
       class_option :except, type: :array,
-               desc: 'Do not enforce for these actions'
+               desc: 'Do not enforce SSL for these actions'
       
       def update_controller
         file = "app/controllers/#{table_name}_controller.rb"
@@ -35,11 +35,11 @@ module ScaffoldPlus
       protected
       
       def only_list
-        [ options.only ].join(", ")
+        options.only.map { |o| ":#{o}" }.join(", ")
       end
       
       def except_list
-        [ options.except ].join(", ")
+        options.except.map { |o| ":#{o}" }.join(", ")
       end
     end
   end
