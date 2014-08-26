@@ -15,8 +15,8 @@ module ScaffoldPlus
         file = "app/controllers/#{table_name}_controller.rb"
         inject_into_file file, after: /^class.*ApplicationController$/ do
           text = "\n  force_ssl if: :ssl_configured?"
-          text << ", only: [ #{only_list} ]" if options.only_for.present?
-          text << ", except: [ #{except_list} ]" if options.except_for.present?
+          text << ", only: [#{only_list}]" if options.only_for.present?
+          text << ", except: [#{except_list}]" if options.except_for.present?
           text
         end
         inject_into_file file, after: /private$/ do
