@@ -17,7 +17,7 @@ module ScaffoldPlus
         inject_into_class "app/models/#{name}.rb", class_name do
           text = options.before? ? "\n" : ""
           text << "  extend FriendlyId\n"
-          text << "  friendly_id :#{options.attribute}, use: :slugged\n"
+          text << "  friendly_id :#{attribute}, use: :slugged\n"
           text << "\n" if options.after?
           text
         end
