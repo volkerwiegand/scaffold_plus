@@ -12,7 +12,7 @@ module ScaffoldPlus
                desc: 'Add a line before generated text in model'
       class_option :after, type: :boolean, default: false,
                desc: 'Add a line after generated text in model'
-      
+
       def update_model
         inject_into_class "app/models/#{name}.rb", class_name do
           text = options.before? ? "\n" : ""
@@ -21,6 +21,11 @@ module ScaffoldPlus
           text << "\n" if options.after?
           text
         end
+      end
+
+      def update_controller
+        file = "app/controllers/#{table_name}_controller.rb"
+        gsub_file file, /(#{class_name})\.find/, "\\1.friendly.find"
       end
     end
   end

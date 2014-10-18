@@ -19,12 +19,12 @@ module ScaffoldPlus
       class_option :after, type: :boolean, default: false,
                desc: 'Add a line after generated text in model'
       source_root File.expand_path('../templates', __FILE__)
-      
+
       def add_migration
         return unless options.migration?
         migration_template "ancestry_migration.rb", "db/migrate/#{migration_name}.rb"
       end
-      
+
       def update_model
         inject_into_class "app/models/#{name}.rb", class_name do
           text = options.before? ? "\n" : ""
@@ -35,7 +35,7 @@ module ScaffoldPlus
           text
         end
       end
-      
+
       def update_controller
         return unless options.permit?
         text = ":ancestry"
@@ -44,19 +44,11 @@ module ScaffoldPlus
         # Special case: no previous permit
         gsub_file file, /^(\s*params)\[:#{name}\]$/, "\\1.require(:#{name}).permit(#{text})"
       end
-      
+
       protected
-      
+
       def migration_name
         "add_ancestry_to_#{table_name}"
-      end
-      
-      def create_index?
-        options.index?
-      end
-      
-      def create_depth?
-        options.depth?
       end
     end
   end
