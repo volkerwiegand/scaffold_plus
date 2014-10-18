@@ -50,6 +50,28 @@ and accepts_nested_attributes_for in one of the parents.
 This helper scaffolds a has_and_belongs_to_many relationship with migration
 and updates to the models.
 
+### Set the autofocus flag on a column
+    rails generate scaffold_plus:autofocus
+
+This helper adds "autofocus: true" to an input field in the form view.
+
+### Add geo location to resource
+    rails generate scaffold_plus:geocoder_init
+    rails generate scaffold_plus:geocoder
+
+These helpers need the [geocoder](http://www.rubygeocoder.com) gem.
+
+The first helper creates an initializer for geocoder. It supports the
+language (default 'de'), timeout (default 5) and units (default km)
+options.
+
+The second one adds geolocating to a resource. It uses Google geocoding
+and requires 'lat', 'lng' and 'address' attributes (the names can be
+changed via options). If a '--country' flag is added, the helper
+tries to isolate the country from the address and stores the country
+code (e.g. DE or NL) in a given 'country' attribute. This is currently
+only implemented for Germany (DE).
+
 ## Testing
 
 Since I have no experience with test driven development (yet), this is

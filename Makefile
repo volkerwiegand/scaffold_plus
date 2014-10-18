@@ -9,15 +9,15 @@ all: build
 rel: build
 	vim lib/scaffold_plus/version.rb
 	git commit -a
-	rake release
 	sudo gem uninstall scaffold_plus --all
-	sudo rake install
+	rake release
 
 
 install: build
 	git commit -a
 	sudo gem uninstall scaffold_plus --all
 	sudo rake install
+	sudo rm -rf pkg
 
 build:
 	git add lib
