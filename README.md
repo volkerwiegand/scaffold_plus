@@ -25,6 +25,13 @@ This helper adds parent#has_many and child#belongs_to to the models
 and updates the mass assignment whitelist in the controller.
 It can also add a migration for the parent_id and a counter.
 
+### Add regular one-to-one association (has_one / belongs_to)
+    rails generate scaffold_plus:has_one
+
+This helper adds parent#has_one and child#belongs_to to the models
+and updates the mass assignment whitelist in the controller.
+It can also add a migration for the parent_id.
+
 ### Add a collection to a resource route
     rails generate scaffold_plus:collection
 
