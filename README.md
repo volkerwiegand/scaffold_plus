@@ -55,6 +55,14 @@ and updates to the models.
 
 This helper adds "autofocus: true" to an input field in the form view.
 
+### Add friendly_id to resource
+    rails generate friendly_id
+    rails generate scaffold_plus:friendly_id [attribute]
+
+This helper depends on the [friendly_id](https://github.com/norman/friendly_id/)
+gem. It adds "extend FriendlyId" to the model and marks the attribute which is to
+be slugged (default: 'name'). Currently it is hardcoded to add a 'slug' attribute.
+
 ### Add geo location to resource
     rails generate scaffold_plus:geocoder_init
     rails generate scaffold_plus:geocoder
