@@ -21,6 +21,8 @@ module ScaffoldPlus
           "    [#{lat}, #{lon}]",
           "  end",
           "",
+          "  after_validation :update_coordinates, on: [:create, :update]",
+          "",
           "  protected",
           "",
           "  def update_coordinates",
