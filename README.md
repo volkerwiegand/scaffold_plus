@@ -87,6 +87,13 @@ tries to isolate the country from the address and stores the country
 code (e.g. DE or NL) in a given 'country' attribute. This is currently
 only implemented for Germany (DE).
 
+### Add geodesic to resource
+    rails generate scaffold_plus:geodesic
+
+This helper requires the [geodesic_wgs84](https://github.com/volkerwiegand/geodesic_wgs84)
+gem. The purpose of this helper is to add a "to_ary" method to the model, which
+makes it easy to use the resource in calulations like average distance and the like.
+
 ## Testing
 
 Since I have no experience with test driven development (yet), this is
