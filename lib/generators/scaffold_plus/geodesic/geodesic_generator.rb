@@ -21,11 +21,7 @@ module ScaffoldPlus
           "    [#{lat}, #{lon}]",
           "  end",
           "",
-          "  after_validation :update_coordinates, on: [:create, :update]",
-          "",
-          "  protected",
-          "",
-          "  def update_coordinates",
+          "  before_save on: [:create, :update] do",
           "    wgs84 = Wgs84.new",
           "    if self.#{lat}.blank? and self.#{lon}.blank?",
           "      if self.#{lat}_dms.present? and self.#{lon}_dms.present?",
@@ -37,7 +33,6 @@ module ScaffoldPlus
           "        self.#{lat}_dms, self.#{lon}_dms = wgs84.lat_lon_dms(self.#{lat}, self.#{lon})",
           "      end",
           "    end",
-          "    true",
           "  end",
           ""
         ]
