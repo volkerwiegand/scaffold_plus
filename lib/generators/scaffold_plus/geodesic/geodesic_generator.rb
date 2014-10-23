@@ -13,25 +13,28 @@ module ScaffoldPlus
 
       def update_model
         lat = options.latitude
-        lon = options.longitude
+        lng = options.longitude
         file = "app/models/#{name}.rb"
         prepend_to_file file, "require 'geodesic_wgs84'\n\n"
         lines = [
           "  def to_ary",
-          "    [#{lat}, #{lon}]",
+          "    [#{lat}, #{lng}]",
+          "  end",
+          "",
+          "  def as_dms(value)",
+          "    return '' if value.blank?",
+          "    wgs84 = Wgs84.new",
+          "    wgs84.as_dms(value)",
           "  end",
           "",
           "  before_save on: [:create, :update] do",
+          "    # Normalize geo information",
           "    wgs84 = Wgs84.new",
-          "    if self.#{lat}.blank? and self.#{lon}.blank?",
-          "      if self.#{lat}_dms.present? and self.#{lon}_dms.present?",
-          "        self.#{lat}, self.#{lon} = wgs84.lat_lon(self.#{lat}_dms, self.#{lon}_dms)",
-          "      end",
+          "    if self.#{lat}.present?",
+          "      self.#{lat} = wgs84.as_deg(self.#{lat})",
           "    end",
-          "    if self.#{lat}_dms.blank? and self.#{lon}_dms.blank?",
-          "      if self.#{lat}.present? and self.#{lon}.present?",
-          "        self.#{lat}_dms, self.#{lon}_dms = wgs84.lat_lon_dms(self.#{lat}, self.#{lon})",
-          "      end",
+          "    if self.#{lng}.present?",
+          "      self.#{lng} = wgs84.as_deg(self.#{lng})",
           "    end",
           "  end",
           ""
