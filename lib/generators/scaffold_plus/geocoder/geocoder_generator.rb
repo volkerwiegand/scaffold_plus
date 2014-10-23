@@ -32,8 +32,10 @@ module ScaffoldPlus
             "      if geo.country_code.upcase == 'DE'",
             "        obj.country = 'DE'",
             "        obj.address = geo.address.gsub(/, Deutschland/, '')",
-            "        obj.#{options.latitude} = geo.latitude",
-            "        obj.#{options.longitude} = geo.longitude",
+            "        if obj.#{options.latitude}.blank? and obj.#{options.longitude}.blank?",
+            "          obj.#{options.latitude} = geo.latitude",
+            "          obj.#{options.longitude} = geo.longitude",
+            "        end",
             "      end",
             "    end",
             "  end"
@@ -41,7 +43,7 @@ module ScaffoldPlus
         else
           country = []
         end
-        lines = options.before? ? [ "\n" ] : []
+        lines = options.before? ? [ "" ] : []
         lines << [
           geocoded,
           country,
@@ -50,7 +52,7 @@ module ScaffoldPlus
             " and obj.#{options.address}_changed? }",
           ""
         ]
-        lines << "\n" if options.after?
+        lines << "" if options.after?
         inject_into_class "app/models/#{name}.rb", class_name do
           lines.flatten.join("\n")
         end
