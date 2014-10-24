@@ -17,7 +17,7 @@ module ScaffoldPlus
         file = "app/models/#{name}.rb"
         prepend_to_file file, "require 'geodesic_wgs84'\n\n"
         lines = [
-          "  def to_ary",
+          "  def to_lat_lon",
           "    [#{lat}, #{lng}]",
           "  end",
           "",
