@@ -39,7 +39,7 @@ module ScaffoldPlus
           text << ", dependent: :#{dependent}" if options.dependent
           text << "\n"
           if options.nested
-            text << "  accepts_nested_attributes_for :#{child}\n"
+            text << "  accepts_nested_attributes_for :#{child}, allow_destroy: true\n"
           end
           text << "\n" if after_array.include?(name)
           text
@@ -61,7 +61,7 @@ module ScaffoldPlus
       def add_to_permit
         return unless options.nested
         list = options.nested.map{|n| ":#{n}"}.join(', ')
-        text = "#{child}_attributes: [ #{list} ]"
+        text = ":#{child}, #{child}_attributes: [ #{list} ]"
         file = "app/controllers/#{table_name}_controller.rb"
         gsub_file file, /(permit\(.*)\)/, "\\1, #{text})"
         # Special case: no previous permit
