@@ -91,7 +91,7 @@ module ScaffoldPlus
       def update_child_controller
         return unless options.route?
         file = "app/controllers/#{children}_controller.rb"
-        gsub_file file /GET \/#{children}\/new$/ do |match|
+        gsub_file file /GET .#{children}.new$/ do |match|
           match = "GET :#{table_name}/:id/#{children}/new"
         end
         child = children.singularize
