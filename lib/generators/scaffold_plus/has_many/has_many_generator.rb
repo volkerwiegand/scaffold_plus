@@ -12,6 +12,8 @@ module ScaffoldPlus
                desc: 'Can be destroy, delete, or restrict'
       class_option :nested, type: :array, banner: 'attribute [...]',
                desc: 'Add accepts_nested_attributes_for (incl. whitelisting)'
+      class_option :route, type: :boolean, default: false,
+               desc: 'Add a nested route and update CHILD controller'
       class_option :foreign_key, type: :string,
                desc: 'Set the name of the foreign key directly'
       class_option :inverse, type: :boolean, default: false,
@@ -27,17 +29,26 @@ module ScaffoldPlus
       class_option :after, type: :array,
                desc: 'Add a line after generated text in models'
       source_root File.expand_path('../templates', __FILE__)
-      
+
       def add_migration
         return unless options.migration?
         migration_template 'child_migration.rb', "db/migrate/#{migration_name}.rb"
       end
-      
+
       def add_counter
         return unless options.counter?
         migration_template 'counter_migration.rb', "db/migrate/#{counter_migration}.rb"
       end
-      
+
+      def add_to_route
+        gsub_file "config/routes.rb", /^  resources :#{table_name}$/ do |match|
+          match << "\n    resources :#{children}\n  end\n"
+        end
+        gsub_file "config/routes.rb", /^  resources :#{table_name} do$/ do |match|
+          match << "\n    resources :#{children}\n"
+        end
+      end
+
       def add_to_models
         inject_into_class "app/models/#{name}.rb", class_name do
           text = before_array.include?(name) ? "\n" : ""
@@ -51,7 +62,7 @@ module ScaffoldPlus
           text << "\n" if after_array.include?(name)
           text
         end
-        
+
         child = children.singularize
         inject_into_class "app/models/#{child}.rb", child.camelize do
           text = before_array.include?(child) ? "\n" : ""
@@ -66,7 +77,7 @@ module ScaffoldPlus
           text
         end
       end
-      
+
       def add_to_permit
         return unless options[:nested].present?
         list = options[:nested].map{|n| ":#{n}"}.join(', ')
@@ -76,17 +87,25 @@ module ScaffoldPlus
         # Special case: no previous permit
         gsub_file file, /^(\s*params)\[:#{name}\]$/, "\\1.require(:#{name}).permit(#{text})"
       end
-      
+
+      def update_child_controller
+        return unless options.route?
+        file = "app/controllers/#{children}_controller.rb"
+        gsub_file file /GET \/#{children}\/new$/ do |match|
+          match = "GET :#{table_name}/:id/#{children}/new"
+        end
+      end
+
       protected
-      
+
       def before_array
         options['before'] || []
       end
-      
+
       def after_array
         options['after'] || []
       end
-      
+
       def dependent
         if options[:dependent].present? && options[:dependent] == "restrict"
           "restrict_with_exception"
@@ -94,15 +113,11 @@ module ScaffoldPlus
           options[:dependent]
         end
       end
-      
+
       def migration_name
         "add_#{name}_id_to_#{children}"
       end
-      
-      def create_index?
-        options[:index]
-      end
-      
+
       def counter_migration
         "add_#{children}_count_to_#{table_name}"
       end
