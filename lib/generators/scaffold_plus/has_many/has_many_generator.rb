@@ -41,6 +41,7 @@ module ScaffoldPlus
       end
 
       def add_to_route
+        return unless options.route?
         gsub_file "config/routes.rb", /^  resources :#{table_name}$/ do |match|
           match << "\n    resources :#{children}\n  end\n"
         end
@@ -91,11 +92,11 @@ module ScaffoldPlus
       def update_child_controller
         return unless options.route?
         file = "app/controllers/#{children}_controller.rb"
-        gsub_file file /GET .#{children}.new$/ do |match|
+        gsub_file file, /GET .#{children}.new$/ do |match|
           match = "GET :#{table_name}/:id/#{children}/new"
         end
         child = children.singularize
-        gsub_file file /^    @#{child} = #{child.camelize}.new$/ do |match|
+        gsub_file file, /^    @#{child} = #{child.camelize}.new$/ do |match|
           match = "    @#{name} = #{class_name}.find(params[:#{name}_id])\n" +
                   "    @#{child} = @#{name}.#{children}.build"
         end
