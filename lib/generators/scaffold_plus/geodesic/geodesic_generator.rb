@@ -14,6 +14,10 @@ module ScaffoldPlus
                desc: 'Create a migration for added attributes'
       class_option :address, type: :boolean, default: true,
                desc: 'Add an address field to the migration'
+      class_option :before, type: :boolean, default: false,
+               desc: 'Add a line before generated text in model'
+      class_option :after, type: :boolean, default: false,
+               desc: 'Add a line after generated text in model'
       source_root File.expand_path('../templates', __FILE__)
 
       def add_migration
@@ -26,7 +30,8 @@ module ScaffoldPlus
         lng = options.longitude
         file = "app/models/#{name}.rb"
         prepend_to_file file, "require 'geodesic_wgs84'\n\n"
-        lines = [
+        lines = options.before? ? [ "" ] : []
+        lines << [
           "  def to_lat_lon",
           "    [#{lat}, #{lng}]",
           "  end",
@@ -49,6 +54,7 @@ module ScaffoldPlus
           "  end",
           ""
         ]
+        lines << "" if options.after?
         inject_into_class file, class_name, lines.join("\n")
       end
 
