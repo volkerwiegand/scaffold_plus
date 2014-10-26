@@ -10,6 +10,16 @@ module ScaffoldPlus
                desc: 'Attribute used for storing latitude'
       class_option :longitude, type: :string, default: "lng",
                desc: 'Attribute used for storing longitude'
+      class_option :migration, type: :boolean, default: false,
+               desc: 'Create a migration for added attributes'
+      class_option :address, type: :boolean, default: true,
+               desc: 'Add an address field to the migration'
+      source_root File.expand_path('../templates', __FILE__)
+
+      def add_migration
+        return unless options.migration?
+        migration_template 'geodesic.rb', "db/migrate/#{migration_name}.rb"
+      end
 
       def update_model
         lat = options.latitude
@@ -40,6 +50,12 @@ module ScaffoldPlus
           ""
         ]
         inject_into_class file, class_name, lines.join("\n")
+      end
+
+      protected
+
+      def migration_name
+        "add_geodesic_to_#{table_name}"
       end
     end
   end
