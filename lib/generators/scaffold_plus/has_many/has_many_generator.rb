@@ -89,16 +89,20 @@ module ScaffoldPlus
         gsub_file file, /^(\s*params)\[:#{name}\]$/, "\\1.require(:#{name}).permit(#{text})"
       end
 
-      def update_child_controller
+      def update_child_controller_and_view
         return unless options.route?
+        child = children.singularize
         file = "app/controllers/#{children}_controller.rb"
         gsub_file file, /GET .#{children}.new$/ do |match|
-          match = "GET :#{table_name}/:id/#{children}/new"
+          match = "GET /#{table_name}/:id/#{children}/new"
         end
-        child = children.singularize
         gsub_file file, /^    @#{child} = #{child.camelize}.new$/ do |match|
           match = "    @#{name} = #{class_name}.find(params[:#{name}_id])\n" +
                   "    @#{child} = @#{name}.#{children}.build"
+        end
+        file = "app/views/#{children}/_form.html.erb"
+        gsub_file file, /form_for\(@#{child}/ do |match|
+          match = "form_for([@#{name}, @#{child}]"
         end
       end
 
