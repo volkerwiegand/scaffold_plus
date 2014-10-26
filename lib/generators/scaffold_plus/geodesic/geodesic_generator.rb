@@ -18,7 +18,7 @@ module ScaffoldPlus
 
       def add_migration
         return unless options.migration?
-        migration_template 'geodesic.rb', "db/migrate/#{migration_name}.rb"
+        migration_template 'geodesic_migration.rb', "db/migrate/#{migration_name}.rb"
       end
 
       def update_model
