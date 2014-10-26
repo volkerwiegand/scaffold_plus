@@ -42,11 +42,11 @@ module ScaffoldPlus
 
       def add_to_route
         return unless options.route?
-        gsub_file "config/routes.rb", /^  resources :#{table_name}$/ do |match|
-          match << "\n    resources :#{children}\n  end\n"
-        end
         gsub_file "config/routes.rb", /^  resources :#{table_name} do$/ do |match|
-          match << "\n    resources :#{children}\n"
+          match << "\n    resources :#{children}"
+        end
+        gsub_file "config/routes.rb", /^  resources :#{table_name}$/ do |match|
+          match << " do\n    resources :#{children}\n  end"
         end
       end
 
