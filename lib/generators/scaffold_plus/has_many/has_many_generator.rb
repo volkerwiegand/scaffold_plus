@@ -55,9 +55,9 @@ module ScaffoldPlus
           text = before_array.include?(name) ? "\n" : ""
           text << "  has_many :#{children}"
           text << ", inverse_of: :#{name}" if options.inverse?
-          text << ", dependent: :#{dependent}" if options[:dependent].present?
+          text << ", dependent: :#{dependent}" if options.dependent.present?
           text << "\n"
-          if options[:nested].present?
+          if options.nested.present?
             text << "  accepts_nested_attributes_for :#{children}\n"
           end
           text << "\n" if after_array.include?(name)
@@ -68,8 +68,8 @@ module ScaffoldPlus
         inject_into_class "app/models/#{child}.rb", child.camelize do
           text = before_array.include?(child) ? "\n" : ""
           text << "  belongs_to :#{name}"
-          if options[:foreign_key].present?
-            text << ", foreign_key: \"#{options[:foreign_key]}\""
+          if options.foreign_key.present?
+            text << ", foreign_key: \"#{options.foreign_key}\""
           end
           text << ", inverse_of: :#{children}" if options.inverse?
           text << ", counter_cache: true" if options.counter?
@@ -80,8 +80,8 @@ module ScaffoldPlus
       end
 
       def add_to_permit
-        return unless options[:nested].present?
-        list = options[:nested].map{|n| ":#{n}"}.join(', ')
+        return if options.nested.blank?
+        list = options.nested.map{|n| ":#{n}"}.join(', ')
         text = "#{children}_attributes: [ #{list} ]"
         file = "app/controllers/#{table_name}_controller.rb"
         gsub_file file, /(permit\(.*)\)/, "\\1, #{text})"
@@ -117,10 +117,10 @@ module ScaffoldPlus
       end
 
       def dependent
-        if options[:dependent].present? && options[:dependent] == "restrict"
+        if options.dependent.present? and options.dependent == "restrict"
           "restrict_with_exception"
         else
-          options[:dependent]
+          options.dependent
         end
       end
 
