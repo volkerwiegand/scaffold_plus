@@ -14,6 +14,8 @@ module ScaffoldPlus
                desc: 'Create a migration for added attributes'
       class_option :address, type: :boolean, default: true,
                desc: 'Add an address field to the migration'
+      class_option :permit, type: :boolean, default: false,
+               desc: 'Allow mass assignment for added attributes'
       class_option :before, type: :boolean, default: false,
                desc: 'Add a line before generated text in model'
       class_option :after, type: :boolean, default: false,
@@ -56,6 +58,16 @@ module ScaffoldPlus
         ]
         lines << "" if options.after?
         inject_into_class file, class_name, lines.join("\n")
+      end
+
+      def update_controller
+        return unless options.permit?
+        text = ":#{options.latitude}, :#{options.latitude}"
+        text << ":address, :country" if options.address?
+        file = "app/controllers/#{table_name}_controller.rb"
+        gsub_file file, /(permit\(.*)\)/, "\\1, #{text})"
+        # Special case: no previous permit
+        gsub_file file, /^(\s*params)\[:#{name}\]$/, "\\1.require(:#{name}).permit(#{text})"
       end
 
       protected
