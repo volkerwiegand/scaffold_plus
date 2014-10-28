@@ -33,7 +33,7 @@ module ScaffoldPlus
         lines = options.before? ? [ "" ] : []
         lines << [
           "  def to_lat_lon",
-          "    [#{lat}, #{lng}]",
+          "    [#{lat}.to_f, #{lng}.to_f]",
           "  end",
           "",
           "  def as_dms(value)",
@@ -46,10 +46,10 @@ module ScaffoldPlus
           "    # Normalize geo information",
           "    wgs84 = Wgs84.new",
           "    if self.#{lat}.present?",
-          "      self.#{lat} = wgs84.as_deg(self.#{lat})",
+          "      self.#{lat} = wgs84.as_deg(self.#{lat}.to_f)",
           "    end",
           "    if self.#{lng}.present?",
-          "      self.#{lng} = wgs84.as_deg(self.#{lng})",
+          "      self.#{lng} = wgs84.as_deg(self.#{lng}.to_f)",
           "    end",
           "  end",
           ""
