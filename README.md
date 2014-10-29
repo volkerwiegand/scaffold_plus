@@ -18,6 +18,15 @@ Or install it yourself as:
 
 ## Usage
 
+### Add migrations to change tables and columns
+    rails generate scaffold_plus:migration table --remove column [...]
+    rails generate scaffold_plus:migration table --rename old:new [...]
+    rails generate scaffold_plus:migration table --change column:type [...]
+    rails generate scaffold_plus:migration table --not_null column [...]
+    rails generate scaffold_plus:migration table --set_default column:value [...]
+
+This helper creates migrations for some 'ALTER TABLE' statements.
+
 ### Add regular one-to-many association (has_many / belongs_to)
     rails generate scaffold_plus:has_many
 

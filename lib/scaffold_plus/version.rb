@@ -1,3 +1,3 @@
 module ScaffoldPlus
-  VERSION = "1.7.14"
+  VERSION = "1.8.0"
 end
