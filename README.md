@@ -27,6 +27,13 @@ Or install it yourself as:
 
 This helper creates migrations for some 'ALTER TABLE' statements.
 
+### Add support for an enum field (requires Rails 4.1 and the enum_help Gem)
+    rails generate scaffold_plus:enum
+
+This helper adds parent#has_many and child#belongs_to to the models
+and updates the mass assignment whitelist in the controller.
+It can also add a migration for the parent_id and a counter.
+
 ### Add regular one-to-many association (has_many / belongs_to)
     rails generate scaffold_plus:has_many
 
