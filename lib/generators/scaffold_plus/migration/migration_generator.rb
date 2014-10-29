@@ -18,38 +18,52 @@ module ScaffoldPlus
                desc: 'Default values for columns'
       source_root File.expand_path('../templates', __FILE__)
 
-      def add_change_table
+      def prepare_the_lines
         @the_lines = []
-        return unless options.remove.present? or options.rename.present?
+      end
+
+      def prepare_change_table
+        return unless options.remove.any? or options.rename.any?
         @the_lines << "    change_table :#{table_name} do |t|"
-
-        options.remove.each do |column|
-          @the_lines << "      t.remove :#{column}"
+        if options.remove.any?
+          options.remove.each do |column|
+            @the_lines << "      t.remove :#{column}"
+          end
         end
-
-        options.rename.each do |column|
-          old_name, new_name = column.split(':')
-          @the_lines << "      t.rename :#{old_name}, :#{new_name}"
+        if options.rename.any?
+          options.rename.each do |column|
+            old_name, new_name = column.split(':')
+            @the_lines << "      t.rename :#{old_name}, :#{new_name}"
+          end
         end
-
         @the_lines << "    end"
       end
 
-      def add_change_column
+      def prepare_change_column
+        return unless options.change.any?
         options.change.each do |column|
           column, new_type = column.split(':')
           @the_lines << "    change_column :#{table_name}, :#{column}, :#{new_type}"
         end
+      end
 
+      def prepare_not_null
+        return unless options.not_null.any?
         options.not_null.each do |column|
           @the_lines << "    change_column_null :#{table_name}, :#{column}, false"
         end
+      end
 
+      def prepare_set_default
+        return unless options.set_default.any?
         options.set_default.each do |column|
           column, preset = column.split(':')
           @the_lines << "    change_column_default :#{table_name}, :#{column}, #{preset}"
         end
+      end
 
+      def add_migration
+        return unless @the_lines.any?
         migration_template "change_migration.rb", "db/migrate/#{migration_name}.rb"
       end
 
