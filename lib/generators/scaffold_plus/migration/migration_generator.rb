@@ -23,14 +23,14 @@ module ScaffoldPlus
       end
 
       def prepare_change_table
-        return unless options.remove.any? or options.rename.any?
+        return unless options.remove.present? or options.rename.present?
         @the_lines << "    change_table :#{table_name} do |t|"
-        if options.remove.any?
+        if options.remove.present?
           options.remove.each do |column|
             @the_lines << "      t.remove :#{column}"
           end
         end
-        if options.rename.any?
+        if options.rename.present?
           options.rename.each do |column|
             old_name, new_name = column.split(':')
             @the_lines << "      t.rename :#{old_name}, :#{new_name}"
@@ -40,7 +40,7 @@ module ScaffoldPlus
       end
 
       def prepare_change_column
-        return unless options.change.any?
+        return unless options.change.present?
         options.change.each do |column|
           column, new_type = column.split(':')
           @the_lines << "    change_column :#{table_name}, :#{column}, :#{new_type}"
@@ -48,14 +48,14 @@ module ScaffoldPlus
       end
 
       def prepare_not_null
-        return unless options.not_null.any?
+        return unless options.not_null.present?
         options.not_null.each do |column|
           @the_lines << "    change_column_null :#{table_name}, :#{column}, false"
         end
       end
 
       def prepare_set_default
-        return unless options.set_default.any?
+        return unless options.set_default.present?
         options.set_default.each do |column|
           column, preset = column.split(':')
           @the_lines << "    change_column_default :#{table_name}, :#{column}, #{preset}"
