@@ -2,7 +2,7 @@ require 'rails/generators/active_record'
 
 module ScaffoldPlus
   module Generators
-    class MigrationIdGenerator < ActiveRecord::Generators::Base
+    class MigrationGenerator < ActiveRecord::Generators::Base
       desc "Generate additional ALTER TABLE migrations"
       argument :name, type: :string,
                desc: 'The resource to be changed'
