@@ -62,7 +62,7 @@ module ScaffoldPlus
 
       def update_controller
         return unless options.permit?
-        text = ":#{options.latitude}, :#{options.latitude}"
+        text = ":#{options.latitude}, :#{options.longitude}"
         text << ", :address, :country" if options.address?
         file = "app/controllers/#{table_name}_controller.rb"
         gsub_file file, /(permit\(.*)\)/, "\\1, #{text})"
