@@ -10,8 +10,12 @@ module ScaffoldPlus
                desc: "The child resource that belongs_to the NAME object"
       class_option :dependent, type: :string, banner: 'ACTION',
                desc: 'Can be destroy, delete, or restrict'
+      class_option :permit, type: :boolean, default: false,
+               desc: 'Allow mass assignment for added attributes'
       class_option :nested, type: :array, banner: 'attribute [...]',
                desc: 'Add accepts_nested_attributes_for (incl. whitelisting)'
+      class_option :route, type: :boolean, default: false,
+               desc: 'Add a nested route and update CHILD controller'
       class_option :foreign_key, type: :string,
                desc: 'Set the name of the foreign key directly'
       class_option :inverse, type: :boolean, default: false,
@@ -29,6 +33,16 @@ module ScaffoldPlus
       def add_migration
         return unless options.migration?
         migration_template 'child_migration.rb', "db/migrate/#{migration_name}.rb"
+      end
+
+      def add_to_route
+        return unless options.route?
+        gsub_file "config/routes.rb", /^  resources :#{table_name} do$/ do |match|
+          match << "\n    resources :#{child.pluralize}"
+        end
+        gsub_file "config/routes.rb", /^  resources :#{table_name}$/ do |match|
+          match << " do\n    resources :#{child.pluralize}\n  end"
+        end
       end
 
       def add_to_models
@@ -58,14 +72,40 @@ module ScaffoldPlus
         end
       end
 
-      def add_to_permit
-        return unless options.nested
+      def update_parent_controller
+        return if options.nested.blank?
         list = options.nested.map{|n| ":#{n}"}.join(', ')
-        text = ":#{child}, #{child}_attributes: [ #{list} ]"
+        text = "#{child}_attributes: [ #{list} ]"
         file = "app/controllers/#{table_name}_controller.rb"
         gsub_file file, /(permit\(.*)\)/, "\\1, #{text})"
         # Special case: no previous permit
         gsub_file file, /^(\s*params)\[:#{name}\]$/, "\\1.require(:#{name}).permit(#{text})"
+      end
+
+      def update_child_controller
+        return unless options.permit?
+        text = ":#{name}_id"
+        file = "app/controllers/#{child.pluralize}_controller.rb"
+        gsub_file file, /(permit\(.*)\)/, "\\1, #{text})"
+        # Special case: no previous permit
+        gsub_file file, /^(\s*params)\[:#{name}\]$/, "\\1.require(:#{name}).permit(#{text})"
+      end
+
+      def update_nested_resource
+        return unless options.route?
+        children = child.pluralize
+        file = "app/controllers/#{children}_controller.rb"
+        gsub_file file, /GET .#{children}.new$/ do |match|
+          match = "GET /#{table_name}/:id/#{children}/new"
+        end
+        gsub_file file, /^    @#{child} = #{child.camelize}.new$/ do |match|
+          match = "    @#{name} = #{class_name}.find(params[:#{name}_id])\n" +
+                  "    @#{child} = @#{name}.#{children}.build"
+        end
+        file = "app/views/#{children}/_form.html.erb"
+        gsub_file file, /form_for\(@#{child}/ do |match|
+          match = "form_for([@#{name}, @#{child}]"
+        end
       end
 
       protected

@@ -10,6 +10,8 @@ module ScaffoldPlus
                desc: "The child resources that belongs_to the NAME object"
       class_option :dependent, type: :string, banner: 'ACTION',
                desc: 'Can be destroy, delete, or restrict'
+      class_option :permit, type: :boolean, default: false,
+               desc: 'Allow mass assignment for added attributes'
       class_option :nested, type: :array, banner: 'attribute [...]',
                desc: 'Add accepts_nested_attributes_for (incl. whitelisting)'
       class_option :route, type: :boolean, default: false,
@@ -79,7 +81,7 @@ module ScaffoldPlus
         end
       end
 
-      def add_to_permit
+      def update_parent_controller
         return if options.nested.blank?
         list = options.nested.map{|n| ":#{n}"}.join(', ')
         text = "#{children}_attributes: [ #{list} ]"
@@ -89,7 +91,16 @@ module ScaffoldPlus
         gsub_file file, /^(\s*params)\[:#{name}\]$/, "\\1.require(:#{name}).permit(#{text})"
       end
 
-      def update_child_controller_and_view
+      def update_child_controller
+        return unless options.permit?
+        text = ":#{name}_id"
+        file = "app/controllers/#{children}_controller.rb"
+        gsub_file file, /(permit\(.*)\)/, "\\1, #{text})"
+        # Special case: no previous permit
+        gsub_file file, /^(\s*params)\[:#{name}\]$/, "\\1.require(:#{name}).permit(#{text})"
+      end
+
+      def update_nested_resource
         return unless options.route?
         child = children.singularize
         file = "app/controllers/#{children}_controller.rb"
