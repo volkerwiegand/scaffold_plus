@@ -31,7 +31,7 @@ module ScaffoldPlus
         inject_into_class "app/models/#{name}.rb", class_name do
           list = values.map{|v| ":#{v}"}.join(', ')
           text = options.before? ? "\n" : ""
-          text << "  enum #{column}: #{list}\n"
+          text << "  enum #{column}: [ #{list} ]\n"
           text << "\n" if options.after?
           text
         end
