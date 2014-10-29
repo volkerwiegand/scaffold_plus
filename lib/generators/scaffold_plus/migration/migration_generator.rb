@@ -20,7 +20,7 @@ module ScaffoldPlus
 
       def add_change_table
         @the_lines = []
-        return unless options.remove.any? or options.rename.any?
+        return unless options.remove.present? or options.rename.present?
         @the_lines << "    change_table :#{table_name} do |t|"
 
         options.remove.each do |column|
