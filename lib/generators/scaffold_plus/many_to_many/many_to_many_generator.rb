@@ -10,8 +10,8 @@ module ScaffoldPlus
                desc: "The first object that has_many TWO objects through NAME"
       argument :two, type: :string,
                desc: "The second object that has_many ONE objects through NAME"
-      class_option :attributes, type: :array, banner: 'name:type [...]',
-               desc: 'Additional attributes for the join table'
+      class_option :add_attr, type: :array, banner: "FIELD[:TYPE][:INDEX] ...",
+               desc: 'Setup additional attributes for join table'
       class_option :dependent, type: :string, banner: 'ACTION',
                desc: 'Can be destroy, delete, or restrict'
       class_option :nested, type: :array, banner: 'attribute [...]',
@@ -70,6 +70,17 @@ module ScaffoldPlus
 
       protected
 
+      def added_fields
+        list = options.add_attr || []
+        array = []
+        list.each do |entry|
+          name, type, index = entry.split(':')
+          type, index = ["string", type] if %w(index uniq).include? type
+          array << [name, type, index]
+        end
+        array
+      end
+
       def before_array
         options.before || []
       end
@@ -96,10 +107,6 @@ module ScaffoldPlus
 
       def counter_cache
         options.counter? ? ", counter_cache: true" : ""
-      end
-
-      def attributes
-        options.attributes || []
       end
     end
   end

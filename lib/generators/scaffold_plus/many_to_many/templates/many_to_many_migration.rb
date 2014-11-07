@@ -3,15 +3,22 @@ class <%= migration_name.camelize %> < ActiveRecord::Migration
     create_table :<%= table_name %> do |t|
       t.belongs_to :<%= one %>
       t.belongs_to :<%= two %>
-<%- attributes.each do |attribute| -%>
-      t.<%= attribute.split(':').second %> :<%= attribute.split(':').first %>
-<%- end -%>
+  <%- added_fields.each do |field| -%>
+      t.<%= field[1] %>  :<%= field[0] %>
+  <%- end -%>
 
       t.timestamps
     end
-<%- if options._index? -%>
+<%- if options.index? -%>
     add_index :<%= table_name %>, :<%= one %>_id
     add_index :<%= table_name %>, :<%= two %>_id
+  <%- added_fields.each do |field| -%>
+    <%- if field[2] == "uniq" -%>
+    add_index :<%= table_name %>, :<%= field[0] %>, unique: true
+    <%- elsif field[2] == "index" -%>
+    add_index :<%= table_name %>, :<%= field[0] %>
+    <%- end -%>
+  <%- end -%>
 <%- end -%>
   end
 end
