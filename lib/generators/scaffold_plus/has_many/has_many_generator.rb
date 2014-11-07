@@ -120,11 +120,11 @@ module ScaffoldPlus
       protected
 
       def before_array
-        options['before'] || []
+        options.before || []
       end
 
       def after_array
-        options['after'] || []
+        options.after || []
       end
 
       def dependent

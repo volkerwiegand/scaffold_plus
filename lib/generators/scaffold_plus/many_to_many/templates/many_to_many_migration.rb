@@ -9,7 +9,7 @@ class <%= migration_name.camelize %> < ActiveRecord::Migration
 
       t.timestamps
     end
-<%- if create_index? -%>
+<%- if options._index? -%>
     add_index :<%= table_name %>, :<%= one %>_id
     add_index :<%= table_name %>, :<%= two %>_id
 <%- end -%>
