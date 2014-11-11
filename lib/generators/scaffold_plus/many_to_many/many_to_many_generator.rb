@@ -76,7 +76,7 @@ module ScaffoldPlus
         list.each do |entry|
           name, type, index = entry.split(':')
           type, index = ["string", type] if %w(index uniq).include? type
-          array << [name, type, index]
+          array << [name, type || "string", index]
         end
         array
       end
