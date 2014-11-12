@@ -10,6 +10,8 @@ module ScaffoldPlus
                desc: 'The model attribute to be slugged'
       class_option :migration, type: :boolean, default: true,
                desc: 'Create migration for the slug attribute'
+      class_option :finders, type: :boolean, default: false,
+               desc: 'Perform friendly finds all the time'
       class_option :before, type: :boolean, default: false,
                desc: 'Add a line before generated text in model'
       class_option :after, type: :boolean, default: false,
@@ -25,7 +27,11 @@ module ScaffoldPlus
         inject_into_class "app/models/#{name}.rb", class_name do
           text = options.before? ? "\n" : ""
           text << "  extend FriendlyId\n"
-          text << "  friendly_id :#{attribute}, use: [:slugged, :finders]\n"
+          if options.finders?
+            text << "  friendly_id :#{attribute}, use: [:slugged, :finders]\n"
+          else
+            text << "  friendly_id :#{attribute}, use: :slugged\n"
+          end
           text << "\n" if options.after?
           text
         end
