@@ -44,7 +44,7 @@ module ScaffoldPlus
         inject_into_file file, after: /private$/ do
           "\n    def authority_forbidden(error)" +
           "\n      Authority.logger.warn(error.message)" +
-          "\n      redirect_to breeders_path, alert: 'Forbidden'" +
+          "\n      redirect_to root_path, alert: 'Forbidden'" +
           "\n    end\n"
         end
         inject_into_file file, after: /@#{name} = #{class_name}.find.*$/ do
