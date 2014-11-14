@@ -29,6 +29,7 @@ module ScaffoldPlus
       end
 
       def add_authorizer
+        return if options.authorizer.present?
         template "authorizer.rb", "app/authorizers/#{name}_authorizer.rb"
       end
     end
