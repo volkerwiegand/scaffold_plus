@@ -8,6 +8,8 @@ module ScaffoldPlus
                desc: 'The object that will be protected'
       class_option :authorizer, type: :string,
                desc: 'authorizer (full name) instead of <class name>Authorizer'
+      class_option :controller, type: :boolean, default: false,
+               desc: 'add standard authorization to controller'
       class_option :before, type: :boolean, default: false,
                desc: 'Add a line before generated text in model'
       class_option :after, type: :boolean, default: false,
@@ -31,6 +33,23 @@ module ScaffoldPlus
       def add_authorizer
         return if options.authorizer.present?
         template "authorizer.rb", "app/authorizers/#{name}_authorizer.rb"
+      end
+
+      def update_controller
+        return unless options.controller?
+        file = "app/controllers/#{table_name}_controller.rb"
+        inject_into_file file, after: /before_action :set_#{name}.*$/ do
+          "\n  authorize_actions_for #{class_name}, only: [:index, :new, :create]"
+        end
+        inject_into_file file, after: /private$/ do
+          "\n    def authority_forbidden(error)" +
+          "\n      Authority.logger.warn(error.message)" +
+          "\n      redirect_to breeders_path, alert: 'Forbidden'" +
+          "\n    end\n"
+        end
+        inject_into_file file, after: /@#{name} = #{class_name}.find.*$/ do
+          "\n      authorize_action_for(@#{name})"
+        end
       end
     end
   end
