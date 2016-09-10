@@ -18,40 +18,6 @@ Or install it yourself as:
 
 ## Usage
 
-### Add migrations to change tables and columns
-    rails generate scaffold_plus:migration table --remove column [...]
-    rails generate scaffold_plus:migration table --rename old:new [...]
-    rails generate scaffold_plus:migration table --change column:type [...]
-    rails generate scaffold_plus:migration table --not_null column [...]
-    rails generate scaffold_plus:migration table --set_default column:value [...]
-
-This helper creates migrations for some 'ALTER TABLE' statements.
-
-### Add support for an enum field
-    rails generate scaffold_plus:enum
-
-This helper depends on the [enumerize](https://github.com/brainspec/enumerize) gem.
-
-### Add regular one-to-many association (has_many / belongs_to)
-    rails generate scaffold_plus:has_many
-
-This helper adds parent#has_many and child#belongs_to to the models
-and updates the mass assignment whitelist in the controller.
-It can also add a migration for the parent_id and a counter.
-
-### Add regular one-to-one association (has_one / belongs_to)
-    rails generate scaffold_plus:has_one
-
-This helper adds parent#has_one and child#belongs_to to the models
-and updates the mass assignment whitelist in the controller.
-It can also add a migration for the parent_id.
-
-### Add a collection to a resource route
-    rails generate scaffold_plus:collection
-
-This helper works on config/routes.rb and adds code for a collection
-to a newly created resource route.
-
 ### Add ancestry to create a tree structure (or hierarchy)
     rails generate scaffold_plus:ancestry
 
@@ -59,27 +25,31 @@ This helper depends on the [ancestry](https://github.com/stefankroes/ancestry) g
 This helper adds has_ancestry to the model and updates the mass assignment
 whitelist in the controller. It can also add a migration.
 
-### Add many-to-many association with intermediate join table
-    rails generate scaffold_plus:many_to_many
+### Add authority
+    rails generate scaffold_plus:authority
 
-This helper creates a join table and updates the two parent resources.
-It can handle additional attributes in the join table incl. whitelisting
-and accepts_nested_attributes_for in one of the parents.
-
-### Add many-to-many association with has_and_belongs_to_many
-    rails generate scaffold_plus:habtm
-
-This helper scaffolds a has_and_belongs_to_many relationship with migration
-and updates to the models.
+TODO
 
 ### Set the autofocus flag on a column
     rails generate scaffold_plus:autofocus
 
 This helper adds "autofocus: true" to an input field in the form view.
 
+### Add a collection to a resource route
+    rails generate scaffold_plus:collection
+
+This helper works on config/routes.rb and adds code for a collection
+to a newly created resource route. Also, empty views are generated.
+
+### Add support for an enum field
+    rails generate scaffold_plus:enumerize
+
+This helper depends on the [enumerize](https://github.com/brainspec/enumerize) gem.
+A column of type string is added to the model and controller attribute whitelist.
+
 ### Add friendly_id to resource
     rails generate friendly_id
-    rails generate scaffold_plus:friendly_id [attribute]
+    rails generate scaffold_plus:friendly_id resource [attribute = 'name']
 
 This helper depends on the [friendly_id](https://github.com/norman/friendly_id) gem.
 It adds "extend FriendlyId" to the model and marks the attribute which is to
@@ -108,6 +78,47 @@ only implemented for Germany (DE).
 This helper requires the [geodesic_wgs84](https://github.com/volkerwiegand/geodesic_wgs84)
 gem. The purpose of this helper is to add a "to_ary" method to the model, which
 makes it easy to use the resource in calulations like average distance and the like.
+
+### Add many-to-many association with has_and_belongs_to_many
+    rails generate scaffold_plus:habtm
+
+This helper scaffolds a has_and_belongs_to_many relationship with migration
+and updates to the models.
+
+### Add regular one-to-many association (has_many / belongs_to)
+    rails generate scaffold_plus:has_many
+
+This helper adds parent#has_many and child#belongs_to to the models
+and updates the mass assignment whitelist in the controller.
+It can also add a migration for the parent_id and a counter.
+
+### Add regular one-to-one association (has_one / belongs_to)
+    rails generate scaffold_plus:has_one
+
+This helper adds parent#has_one and child#belongs_to to the models
+and updates the mass assignment whitelist in the controller.
+It can also add a migration for the parent_id.
+
+### Add many-to-many association with intermediate join table
+    rails generate scaffold_plus:many_to_many
+
+This helper creates a join table and updates the two parent resources.
+It can handle additional attributes in the join table incl. whitelisting
+and accepts_nested_attributes_for in one of the parents.
+
+### Add migrations to change tables and columns
+    rails generate scaffold_plus:migration table --remove column [...]
+    rails generate scaffold_plus:migration table --rename old:new [...]
+    rails generate scaffold_plus:migration table --change column:type [...]
+    rails generate scaffold_plus:migration table --not_null column [...]
+    rails generate scaffold_plus:migration table --set_default column:value [...]
+
+This helper creates migrations for some 'ALTER TABLE' statements.
+
+### Add sorcery
+    rails generate scaffold_plus:sorcery
+
+TODO
 
 ## Testing
 
