@@ -3,7 +3,7 @@ require 'rails/generators/active_record'
 module ScaffoldPlus
   module Generators
     class AncestryGenerator < ActiveRecord::Generators::Base
-      desc "Add ancestry to create a tree structure (or hierarchy)"
+      desc "Add ancestry to create a tree structure (requires ancestry gem)"
       argument :name, type: :string,
                desc: "The object that has_ancestry"
       class_option :depth, type: :boolean, default: false,

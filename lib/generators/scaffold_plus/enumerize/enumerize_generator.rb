@@ -2,14 +2,14 @@ require 'rails/generators/active_record'
 
 module ScaffoldPlus
   module Generators
-    class EnumGenerator < ActiveRecord::Generators::Base
-      desc "Add an enum field to a resource (requires enum_help gem)"
+    class EnumerizeGenerator < ActiveRecord::Generators::Base
+      desc "Add an enum field to a resource (requires enumerize gem)"
       argument :name, type: :string,
                desc: "The object that will have the enum field"
       argument :column, type: :string,
                desc: "The column to be used as enum field"
       argument :values, type: :array, banner: "VALUE [...]",
-               desc: "Values (counting from 0, first is default)"
+               desc: "Values (can be strings or symbols)"
       class_option :migration, type: :boolean, default: false,
                desc: 'Create a migration for added attributes'
       class_option :index, type: :boolean, default: true,
@@ -29,9 +29,9 @@ module ScaffoldPlus
 
       def update_model
         inject_into_class "app/models/#{name}.rb", class_name do
-          list = values.map{|v| ":#{v}"}.join(', ')
           text = options.before? ? "\n" : ""
-          text << "  enum #{column}: [ #{list} ]\n"
+          text << "  extend Enumerize\n"
+          text << "  enumerize :#{column}, in: #{values}\n"
           text << "\n" if options.after?
           text
         end

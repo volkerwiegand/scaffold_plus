@@ -50,6 +50,9 @@ module ScaffoldPlus
         inject_into_file file, after: /@#{name} = #{class_name}.find.*$/ do
           "\n      authorize_action_for(@#{name})"
         end
+        inject_into_file file, after: /@#{name} = #{class_name}.friendly.find.*$/ do
+          "\n      authorize_action_for(@#{name})"
+        end
       end
     end
   end
