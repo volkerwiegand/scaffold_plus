@@ -1,0 +1,18 @@
+<%%- page_title t('sorcery.log_in') -%>
+<h2><%%= t('sorcery.header', name: app_name) %></h2>
+<%%- content_for(:help) { "<%= name %>_login" } -%>
+
+<%%= simple_form_for(@<%= name %>, url: {action: "access"}) do |f| %>
+  <%%= f.error_notification %>
+
+  <%%= f.input :email, autofocus: true %>
+  <%%= f.input :password %>
+<%- if options.remember_me? -%>
+  <%%= f.input :remember_me %>
+<%- end -%>
+
+  <%%= f.button :submit, t('sorcery.submit'), class: 'btn btn-primary' %>
+<%- if options.reset_password? -%>
+  <%%= link_to t('sorcery.reset.forgot'), password_<%= table_name %>_path, class: 'btn btn-default' %>
+<%- end -%>
+<%% end %>

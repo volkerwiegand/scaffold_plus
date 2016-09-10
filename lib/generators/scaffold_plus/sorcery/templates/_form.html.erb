@@ -1,0 +1,23 @@
+<%%= simple_form_for(@<%= name %>) do |f| %>
+  <%%= f.error_notification %>
+
+  <%%= f.input :email, autofocus: true %>
+  <%%= f.input :name %>
+  <%%= f.input :phone %>
+  <%%= f.input :comment %>
+  <%%= f.input :theme %>
+  <%%= f.input :active %>
+  <%%- if current_<%= name %>.sysadm and @<%= name %> != current_<%= name %> -%>
+    <%%= f.input :sysadm %>
+  <%%- end -%>
+  <%%= f.input :password %>
+  <%%= f.input :password_confirmation %>
+
+  <%%= f.button :submit, class: 'btn btn-primary' %>
+  <%%- if @<%= name %>.new_record? -%>
+    <%%= link_to t('actions.back.index'), <%= table_name %>_path, class: 'btn btn-default' %>
+  <%%- else -%>
+    <%%= link_to t('actions.back.show'), @<%= name %>, class: 'btn btn-default' %>
+    <%%= link_to t('actions.back.index'), <%= table_name %>_path, class: 'btn btn-default' %>
+  <%%- end -%>
+<%% end %>

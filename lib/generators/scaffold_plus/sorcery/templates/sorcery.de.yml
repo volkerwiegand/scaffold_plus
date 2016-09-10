@@ -1,0 +1,62 @@
+de:
+  sorcery:
+    forbidden: "Diese Aktion ist nicht erlaubt."
+    log_in: "Login"
+    log_out: "Logout"
+    sign_up: "Benutzerkonto anlegen"
+    header: "%{name} Login"
+    submit: "Login"
+<%- if options.reset_password? -%>
+    reset:
+      forgot: "Kennwort vergessen?"
+      header: "Kennwort anfordern"
+      send: "Anleitung senden"
+      back: "Zurück zum Login"
+      delivered: "Eine Anleitung wurde an die E-Mail Adresse gesendet."
+      missing: "Keine E-Mail Adresse angegeben."
+      choose: "Eingabe neues Kennwort"
+      change: "Kennwort ändern"
+      success: "Das Kennwort wurde aktualisiert."
+      failed: "Das Kennwort konnte nicht aktualisiert werden."
+<%- end -%>
+    new_password: "Neues Kennwort"
+    failed: "E-Mail oder Kennwort ungültig"
+    success: "Willkommen und frohes Schaffen!"
+    goodbye: "Tschüss und bis bald."
+    required: "Bitte zuerst anmelden."
+
+  <%= name %>_mailer:
+    reset_password_email:
+      subject: "Kennwort für #{name} zurücksetzen"
+
+  activerecord:
+    models:
+      <%= name %>:
+        one: "Benutzer"
+        other: "Benutzer"
+        new: "Neuer Benutzer"
+    attributes:
+      <%= name %>:
+        email: "E-Mail"
+        name: "Name"
+        phone: "Telefon"
+        comment: "Bemerkung"
+        theme: "Oberfläche"
+        active: "Aktiv"
+        sysadm: "SysAdmin"
+        password: "Kennwort"
+        password_confirmation: "Kennwort wiederholen"
+<%- if options.remember_me? -%>
+        remember_me: "Angemeldet bleiben"
+<%- end -%>
+<%- if options.activity_logging? -%>
+        last_login_at: "Letzte Anmeldung"
+        last_logout_at: "Letzte Abmeldung"
+        last_activity_at: "Letzte Aktivität"
+        last_login_from_ip_address: "Letzte IP-Adresse"
+<%- end -%>
+<%- if options.brute_force_protection? -%>
+        failed_logins_count: "Fehlversuche Anmeldung"
+        lock_expires_at: "Gesperrt bis"
+<%- end -%>
+

@@ -1,0 +1,62 @@
+en:
+  sorcery:
+    forbidden: "That is forbidden."
+    log_in: "Log in"
+    log_out: "Log out"
+    sign_up: "Sign up"
+    header: "%{name} Login"
+    submit: "Log in"
+<%- if options.reset_password? -%>
+    reset:
+      forgot: "Forgot password?"
+      header: "Request new password"
+      send: "Send instructions"
+      back: "Back to log in"
+      delivered: "Instructions were sent to email address."
+      missing: "Missing email address."
+      choose: "Enter new password"
+      change: "Change password"
+      success: "Password has been changed."
+      failed: "Password could not be changed."
+<%- end -%>
+    new_password: "Neues Kennwort"
+    failed: "E-Mail oder Kennwort ungültig"
+    success: "Willkommen und frohes Schaffen!"
+    goodbye: "Tschüss und bis bald."
+    required: "Please log in first."
+
+  <%= name %>_mailer:
+    reset_password_email:
+      subject: "Kennwort für #{name} zurücksetzen"
+
+  activerecord:
+    models:
+      <%= name %>:
+        one: "Benutzer"
+        other: "Benutzer"
+        new: "Neuer Benutzer"
+    attributes:
+      <%= name %>:
+        email: "E-Mail"
+        name: "Name"
+        phone: "Telefon"
+        comment: "Bemerkung"
+        theme: "Theme"
+        active: "Active"
+        sysadm: "SysAdmin"
+        password: "Password"
+        password_confirmation: "Repeat password"
+<%- if options.remember_me? -%>
+        remember_me: "Remember me"
+<%- end -%>
+<%- if options.activity_logging? -%>
+        last_login_at: "Letzte Anmeldung"
+        last_logout_at: "Letzte Abmeldung"
+        last_activity_at: "Letzte Aktivität"
+        last_login_from_ip_address: "Letzte IP-Adresse"
+<%- end -%>
+<%- if options.brute_force_protection? -%>
+        failed_logins_count: "Fehlversuche Anmeldung"
+        lock_expires_at: "Gesperrt bis"
+<%- end -%>
+

@@ -1,0 +1,15 @@
+<%%- page_title t('sorcery.reset.choose') -%>
+<h2><%%= t('sorcery.reset.choose') %></h2>
+<%%- content_for(:help) { "<%= name %>_change" } -%>
+
+<%%= simple_form_for(@<%= name %>, url: {action: "refresh"}) do |f| %>
+  <%%= f.error_notification %>
+
+  <%%= f.input :email, disabled: true, required: false %>
+  <%%= f.input :reset_password_token, as: :hidden %>
+  <%%= f.input :password, required: true, autofocus: true %>
+  <%%= f.input :password_confirmation, required: true %>
+
+  <%%= f.button :submit, t('sorcery.reset.change'), class: 'btn btn-primary' %>
+  <%%= link_to t('sorcery.reset.back'), log_in_<%= table_name %>_path, class: 'btn btn-default' %>
+<%% end %>

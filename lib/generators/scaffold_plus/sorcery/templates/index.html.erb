@@ -1,0 +1,62 @@
+<%%- page_title t('headers.index', name: t('activerecord.models.<%= name %>.other')) -%>
+<h2><%%= t('headers.index', name: t('activerecord.models.<%= name %>.other')) %></h2>
+<%%- content_for(:help) { "<%= name %>_index" } -%>
+
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>
+        <%%= t('activerecord.attributes.<%= name %>.name') %>
+      </th>
+      <th>
+        <%%= t('activerecord.attributes.<%= name %>.phone') %>
+      </th>
+      <th>
+        <%%= t('activerecord.attributes.<%= name %>.comment') %>
+      </th>
+      <th>
+        <%%= t('activerecord.attributes.<%= name %>.active') %>
+      </th>
+      <th class="index-actions">
+        <%%= t('actions.title') %>
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%% @<%= table_name %>.each do |<%= name %>| %>
+      <tr>
+        <td>
+          <%%= mail_to(<%= name %>.email, <%= name %>.name) %>
+        </td>
+        <td>
+          <%%= <%= name %>.phone %>
+        </td>
+        <td>
+          <%%= <%= name %>.comment %>
+        </td>
+        <td>
+          <%%= <%= name %>.active ? t('simple_form.yes') : t('simple_form.no') %>
+        <%%- if <%= name %>.sysadm -%>
+          (<%%= t('activerecord.attributes.<%= name %>.sysadm') %>)
+        <%%- end -%>
+        </td>
+        <td class="index-actions">
+          <%%= link_to t('actions.show'), <%= name %>, class: 'btn btn-default btn-xs' %>
+          <%%- if current_<%= name %>.sysadm or <%= name %> == current_<%= name %> -%>
+            <br>
+            <%%= link_to t('actions.edit'), [:edit, <%= name %>], class: 'btn btn-default btn-xs' %>
+          <%%- end -%>
+          <%%- if current_<%= name %>.sysadm and <%= name %> != current_<%= name %> -%>
+            <br>
+            <%%= link_to t('actions.destroy'), <%= name %>, method: :delete, data: { confirm: t('actions.confirm') }, class: 'btn btn-danger btn-xs' %>
+          <%%- end -%>
+        </td>
+      </tr>
+    <%% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%%= link_to t('actions.add', name: t('activerecord.models.<%= name %>.one')), new_<%= name %>_path, class: 'btn btn-primary' %>
