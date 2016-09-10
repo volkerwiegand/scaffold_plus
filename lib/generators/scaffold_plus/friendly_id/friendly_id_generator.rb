@@ -37,6 +37,12 @@ module ScaffoldPlus
         end
       end
 
+      def update_controller
+        return if options.finders?
+        file = "app/controllers/#{table_name}_controller.rb"
+        gsub_file file, /(#{class_name})\.find/, "\\1.friendly.find"
+      end
+
       protected
 
       def migration_name

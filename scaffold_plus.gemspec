@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = ScaffoldPlus::VERSION
   spec.authors       = ["Volker Wiegand"]
   spec.email         = ["volker.wiegand@cvw.de"]
-  spec.summary       = "A collection of little helpers for Rails scaffolding"
+  spec.summary       = "A collection of helpers for Rails scaffolding"
   spec.description   = spec.summary
   spec.homepage      = "https://github.com/volkerwiegand/scaffold_plus"
   spec.license       = "MIT"
@@ -19,9 +19,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.required_ruby_version = '>= 1.9.3'
-  spec.add_dependency 'activerecord', '~> 4.0'
+  spec.add_dependency 'activerecord', '>= 4.0'
   
-  spec.add_development_dependency 'railties', '~> 4.0'
+  spec.add_development_dependency 'railties', '>= 4.0'
   spec.add_development_dependency "bundler", "~> 1.6"
-  spec.add_development_dependency "rake", "~> 10.1"
+  spec.add_development_dependency "rake", ">= 10.1"
 end

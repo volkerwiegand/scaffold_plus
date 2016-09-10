@@ -1,6 +1,6 @@
 # ScaffoldPlus
 
-A collection of little helpers for Rails scaffolding
+A collection of helpers for Rails scaffolding
 
 ## Installation
 
@@ -27,12 +27,10 @@ Or install it yourself as:
 
 This helper creates migrations for some 'ALTER TABLE' statements.
 
-### Add support for an enum field (requires Rails 4.1 and the enum_help Gem)
+### Add support for an enum field
     rails generate scaffold_plus:enum
 
-This helper adds parent#has_many and child#belongs_to to the models
-and updates the mass assignment whitelist in the controller.
-It can also add a migration for the parent_id and a counter.
+This helper depends on the [enumerize](https://github.com/brainspec/enumerize) gem.
 
 ### Add regular one-to-many association (has_many / belongs_to)
     rails generate scaffold_plus:has_many
@@ -57,6 +55,7 @@ to a newly created resource route.
 ### Add ancestry to create a tree structure (or hierarchy)
     rails generate scaffold_plus:ancestry
 
+This helper depends on the [ancestry](https://github.com/stefankroes/ancestry) gem.
 This helper adds has_ancestry to the model and updates the mass assignment
 whitelist in the controller. It can also add a migration.
 
@@ -82,8 +81,8 @@ This helper adds "autofocus: true" to an input field in the form view.
     rails generate friendly_id
     rails generate scaffold_plus:friendly_id [attribute]
 
-This helper depends on the [friendly_id](https://github.com/norman/friendly_id/)
-gem. It adds "extend FriendlyId" to the model and marks the attribute which is to
+This helper depends on the [friendly_id](https://github.com/norman/friendly_id) gem.
+It adds "extend FriendlyId" to the model and marks the attribute which is to
 be slugged (default: 'name'). Currently it is hardcoded to add a 'slug' attribute.
 
 ### Add geo location to resource
