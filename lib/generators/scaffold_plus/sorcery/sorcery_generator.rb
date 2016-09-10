@@ -77,7 +77,7 @@ module ScaffoldPlus
           "    end"
         ] if options.reset_password?
         lines << [
-          "  end"
+          "  end",
           "  get '/login'  => '#{table_name}#log_in',  as: :login,  format: false",
           "  get '/logout' => '#{table_name}#log_out', as: :logout, format: false",
           ""
