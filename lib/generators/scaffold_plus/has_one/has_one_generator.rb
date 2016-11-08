@@ -50,9 +50,9 @@ module ScaffoldPlus
           text = before_array.include?(name) ? "\n" : ""
           text << "  has_one :#{child}"
           text << ", inverse_of: :#{name}" if options.inverse?
-          text << ", dependent: :#{dependent}" if options.dependent
+          text << ", dependent: :#{dependent}" if options.dependent.present?
           text << "\n"
-          if options.nested
+          if options.nested.present?
             text << "  accepts_nested_attributes_for :#{child}, allow_destroy: true\n"
           end
           text << "\n" if after_array.include?(name)
@@ -77,6 +77,7 @@ module ScaffoldPlus
         list = options.nested.map{|n| ":#{n}"}.join(', ')
         text = "#{child}_attributes: [ #{list} ]"
         file = "app/controllers/#{table_name}_controller.rb"
+        return unless File.exist?(file)
         gsub_file file, /(permit\(.*)\)/, "\\1, #{text})"
         # Special case: no previous permit
         gsub_file file, /^(\s*params)\[:#{name}\]$/, "\\1.require(:#{name}).permit(#{text})"
@@ -86,6 +87,7 @@ module ScaffoldPlus
         return unless options.permit?
         text = ":#{name}_id"
         file = "app/controllers/#{child.pluralize}_controller.rb"
+        return unless File.exist?(file)
         gsub_file file, /(permit\(.*)\)/, "\\1, #{text})"
         # Special case: no previous permit
         gsub_file file, /^(\s*params)\[:#{name}\]$/, "\\1.require(:#{name}).permit(#{text})"
@@ -95,16 +97,20 @@ module ScaffoldPlus
         return unless options.route?
         children = child.pluralize
         file = "app/controllers/#{children}_controller.rb"
-        gsub_file file, /GET .#{children}.new$/ do |match|
-          match = "GET /#{table_name}/:id/#{children}/new"
-        end
-        gsub_file file, /^    @#{child} = #{child.camelize}.new$/ do |match|
-          match = "    @#{name} = #{class_name}.find(params[:#{name}_id])\n" +
-                  "    @#{child} = @#{name}.#{children}.build"
+        if File.exist?(file)
+          gsub_file file, /GET .#{children}.new$/ do |match|
+            match = "GET /#{table_name}/:id/#{children}/new"
+          end
+          gsub_file file, /^    @#{child} = #{child.camelize}.new$/ do |match|
+            match = "    @#{name} = #{class_name}.find(params[:#{name}_id])\n" +
+                    "    @#{child} = @#{name}.#{children}.build"
+          end
         end
         file = "app/views/#{children}/_form.html.erb"
-        gsub_file file, /form_for\(@#{child}/ do |match|
-          match = "form_for([@#{name}, @#{child}]"
+        if File.exist?(file)
+          gsub_file file, /form_for\(@#{child}/ do |match|
+            match = "form_for([@#{name}, @#{child}]"
+          end
         end
       end
 
@@ -119,7 +125,7 @@ module ScaffoldPlus
       end
 
       def dependent
-        if options.dependent && options.dependent == "restrict"
+        if options.dependent.present? && options.dependent == "restrict"
           "restrict_with_exception"
         else
           options.dependent
@@ -132,3 +138,5 @@ module ScaffoldPlus
     end
   end
 end
+
+# vim: set expandtab softtabstop=2 shiftwidth=2 autoindent :

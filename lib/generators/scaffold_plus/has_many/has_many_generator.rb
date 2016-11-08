@@ -60,7 +60,7 @@ module ScaffoldPlus
           text << ", dependent: :#{dependent}" if options.dependent.present?
           text << "\n"
           if options.nested.present?
-            text << "  accepts_nested_attributes_for :#{children}\n"
+            text << "  accepts_nested_attributes_for :#{children}, allow_destroy: true, reject_if: :all_blank\n"
           end
           text << "\n" if after_array.include?(name)
           text
