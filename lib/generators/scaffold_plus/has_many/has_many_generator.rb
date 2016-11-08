@@ -86,6 +86,7 @@ module ScaffoldPlus
         list = options.nested.map{|n| ":#{n}"}.join(', ')
         text = "#{children}_attributes: [ #{list} ]"
         file = "app/controllers/#{table_name}_controller.rb"
+        return unless File.exist?(file)
         gsub_file file, /(permit\(.*)\)/, "\\1, #{text})"
         # Special case: no previous permit
         gsub_file file, /^(\s*params)\[:#{name}\]$/, "\\1.require(:#{name}).permit(#{text})"
@@ -95,6 +96,7 @@ module ScaffoldPlus
         return unless options.permit?
         text = ":#{name}_id"
         file = "app/controllers/#{children}_controller.rb"
+        return unless File.exist?(file)
         gsub_file file, /(permit\(.*)\)/, "\\1, #{text})"
         # Special case: no previous permit
         gsub_file file, /^(\s*params)\[:#{name}\]$/, "\\1.require(:#{name}).permit(#{text})"
@@ -104,16 +106,20 @@ module ScaffoldPlus
         return unless options.route?
         child = children.singularize
         file = "app/controllers/#{children}_controller.rb"
-        gsub_file file, /GET .#{children}.new$/ do |match|
-          match = "GET /#{table_name}/:id/#{children}/new"
-        end
-        gsub_file file, /^    @#{child} = #{child.camelize}.new$/ do |match|
-          match = "    @#{name} = #{class_name}.find(params[:#{name}_id])\n" +
-                  "    @#{child} = @#{name}.#{children}.build"
+        if File.exist?(file)
+          gsub_file file, /GET .#{children}.new$/ do |match|
+            match = "GET /#{table_name}/:id/#{children}/new"
+          end
+          gsub_file file, /^    @#{child} = #{child.camelize}.new$/ do |match|
+            match = "    @#{name} = #{class_name}.find(params[:#{name}_id])\n" +
+                    "    @#{child} = @#{name}.#{children}.build"
+          end
         end
         file = "app/views/#{children}/_form.html.erb"
-        gsub_file file, /form_for\(@#{child}/ do |match|
-          match = "form_for([@#{name}, @#{child}]"
+        if File.exist?(file)
+          gsub_file file, /form_for\(@#{child}/ do |match|
+            match = "form_for([@#{name}, @#{child}]"
+          end
         end
       end
 
@@ -145,3 +151,5 @@ module ScaffoldPlus
     end
   end
 end
+
+# vim: set expandtab softtabstop=2 shiftwidth=2 autoindent :
