@@ -49,7 +49,7 @@ module ScaffoldPlus
       protected
 
       def migration_name
-        "add_ancestry_to_#{table_name}"
+        "add_#{column}_to_#{table_name}"
       end
     end
   end
