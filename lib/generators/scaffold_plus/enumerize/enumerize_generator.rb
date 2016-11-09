@@ -8,8 +8,8 @@ module ScaffoldPlus
                desc: "The object that will have the enum field"
       argument :column, type: :string,
                desc: "The column to be used as enum field"
-      argument :values, type: :array, banner: "VALUE [...]",
-               desc: "Values (can be strings or symbols)"
+      argument :values, type: :string, banner: "[:value, ...]",
+               desc: "Values (can be strings, symbols or a constant)"
       class_option :migration, type: :boolean, default: false,
                desc: 'Create a migration for added attributes'
       class_option :index, type: :boolean, default: true,
